@@ -8,12 +8,18 @@ pipeline {
     stages {
         stage('Cloning Git') {
             steps {
-                git 'https://github.com/mohamedelmeliani/tp4devops'
+                script {
+                    // Check out the correct branch
+                    sh 'git branch -a' // Debugging step to check branches
+                    git branch: 'main', url: 'https://github.com/mohamedelmeliani/tp4devops'
+                }
             }
         }
         stage('Building image') {
             steps {
                 script {
+                    // Ensure the image is built correctly
+                    echo "Building image with tag: ${BUILD_NUMBER}"
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
             }
@@ -21,6 +27,7 @@ pipeline {
         stage('Test image') {
             steps {
                 script {
+                    // Simple test step (replace with actual tests if needed)
                     echo 'Tests passed'
                 }
             }
@@ -28,8 +35,13 @@ pipeline {
         stage('Publish Image') {
             steps {
                 script {
-                    docker.withRegistry('', registryCredential) {
-                        dockerImage.push()
+                    // Push image to Docker registry if it's built
+                    if (dockerImage) {
+                        docker.withRegistry('', registryCredential) {
+                            dockerImage.push()
+                        }
+                    } else {
+                        echo 'Docker image not built.'
                     }
                 }
             }
