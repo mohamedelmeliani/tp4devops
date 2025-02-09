@@ -1,7 +1,7 @@
 pipeline {
     environment {
         registry = 'medelm1/job3tp4'
-        registryCredential = 'dockerhub'
+        registryCredential = 'docker_hub'
         dockerImage = ''
     }
     agent any
