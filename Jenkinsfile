@@ -10,7 +10,6 @@ pipeline {
             steps {
                 script {
                     // Check out the correct branch
-                    sh 'git branch -a' // Debugging step to check branches
                     git branch: 'main', url: 'https://github.com/mohamedelmeliani/tp4devops'
                 }
             }
